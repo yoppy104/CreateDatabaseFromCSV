@@ -106,7 +106,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\YoppY\Documents\開発\CreateDatabaseFromCSV\CreateDatabaseFromCSV\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\YoppY\Documents\開発\CreateDatabaseFromCSV\CreateDatabaseFromCSV\bin\sqlite3.dll</AdditionalLibraryDirectories>
       <AdditionalDependencies>sqlite3.exp;sqlite3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -143,7 +143,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>sqlite3.exp;sqlite3.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Users\YoppY\Documents\開発\CreateDatabaseFromCSV\CreateDatabaseFromCSV\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\YoppY\Documents\開発\CreateDatabaseFromCSV\CreateDatabaseFromCSV\bin\sqlite3.dll</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -155,6 +155,9 @@
     <ClInclude Include="sqlite3.h" />
     <ClInclude Include="sqlite3ext.h" />
     <ClInclude Include="utils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
