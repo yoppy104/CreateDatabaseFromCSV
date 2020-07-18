@@ -11,6 +11,8 @@ private:
 public:
 	DB(std::string file_name);
 	~DB();
+
+	void createTable(std::string file_name);
 };
 
 //ファイル名を受け取って、データベース用のファイルを作成、または指定する

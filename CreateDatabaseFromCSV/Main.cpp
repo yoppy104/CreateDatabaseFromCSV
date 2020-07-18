@@ -24,5 +24,9 @@ int main(int argc, char* argv[]) {
 	std::string db_file_name = "sample2"; // argv[1];
 	DB db = DB(db_file_name);
 
+	// ファイルをリストに読み込む処理のテスト
+	/*std::string file_name = "test_csv";
+	read_file_test(file_name);*/
+
 	std::cout << "done.." << std::endl;
 }

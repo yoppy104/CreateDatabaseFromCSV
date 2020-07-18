@@ -17,3 +17,8 @@ bool CompareString(std::string text1, std::string text2);
 /// 文章を指定文字で分割して配列として返却する.
 ///</summary>
 std::vector<std::string> Split(std::string* sentence, const char* parse_char, int n = 100);
+
+///<summary>
+/// ファイル内の文章をvector<string>の形式で返す
+///</summary>
+std::vector<std::string> read_file(std::string file_name);

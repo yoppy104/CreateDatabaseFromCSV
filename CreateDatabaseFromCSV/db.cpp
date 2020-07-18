@@ -18,6 +18,46 @@ DB::~DB() {
 	sqlite3_close(this->db);
 }
 
+void DB::createTable(std::string file_name) {
+	// ファイルを1行ずつリストに入れる
+	std::vector<std::string> lines = read_file(file_name);
+
+	int num_lines = lines.size();
+	int volume_data = num_lines - 4;
+
+	if (volume_data < 0) {
+		std::cout << "当該ファイルの中に必要な情報が記載されていません : " << file_name << std::endl;
+		return;
+	}
+
+	/*
+	memo : 最初の4行はテーブル作成コマンドに使用する。
+				1行目：テーブルの名前
+				2行目：各カラムの要素名
+				3行目：各カラムの型
+				4行目：制約条件などの追加情報
+				  以降：各データ
+	*/
+
+	std::string table_name = lines[0];												// テーブルの名前
+	std::vector<std::string> column_name = Split(&lines[1], ",");		// カラムの名称
+	std::vector<std::string> column_type = Split(&lines[2], ",");			// カラムの型
+	std::vector<std::string> column_addinfo = Split(&lines[3], ",");	// カラムの制約条件等の追加情報
+
+
+	//データベース上にテーブルを作成する
+	///todo///
+
+	// 各データの挿入作業を行う
+	std::vector<std::string> data;
+	for (int i = 4; i < num_lines; i++) {
+		data = Split(&lines[i], ",");
+
+		data.clear();
+	}
+}
+
+
 sqlite3* make_db_file(std::string file_name) {
 	sqlite3* db;
 

@@ -1,5 +1,7 @@
 # include "utils.h"
 #include <algorithm>
+#include <iostream>
+#include <fstream>
 
 std::string UpperCase(std::string text) {
     //入力された文字列を大文字に変換
@@ -30,6 +32,39 @@ std::vector<std::string> Split(std::string* sentence, const char* parse_char, in
         out.push_back(sentence->substr(next_start_index, next_parse_char_index-next_start_index));
 
         next_start_index = next_parse_char_index + 1;
+    }
+
+    return out;
+}
+
+
+std::vector<std::string> read_file(std::string file_name) {
+    std::vector<std::string> out;
+
+    if (file_name.empty()) {
+        std::cout << "ファイル名が入力されていません" << std::endl;
+        return out;
+    }
+
+    // 拡張子がないときには、CSV拡張子を追加する
+    if (file_name.find(".csv") == std::string::npos) {
+        file_name.append(".csv");
+    }
+
+    std::ifstream ifs(file_name);
+
+    // ファイルがなかったりして失敗したら終了。
+    if (! ifs.is_open()) {
+        std::cout << "次のファイルが存在しません [" << file_name << "]" << std::endl;
+        return out;
+    }
+
+    std::string line;
+
+    // 1行ずつ取り出して、リストに入れていく
+    while (! ifs.eof()) {
+        std::getline(ifs, line);
+        out.push_back(line);
     }
 
     return out;

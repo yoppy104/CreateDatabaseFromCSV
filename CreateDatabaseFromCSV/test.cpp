@@ -19,3 +19,12 @@ void split_test() {
         std::cout << *itr << std::endl;
     }
 }
+
+
+void read_file_test(std::string file_name) {
+    std::vector<std::string> out = read_file(file_name);
+
+    for (auto itr = out.begin(); itr != out.end(); itr++) {
+        std::cout << *itr << std::endl;
+    }
+}
