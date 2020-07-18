@@ -14,6 +14,6 @@ std::string UpperCase(std::string text);
 bool CompareString(std::string text1, std::string text2);
 
 ///<summary>
-/// 文章を指定文字で分割して配列として返却する
+/// 文章を指定文字で分割して配列として返却する.
 ///</summary>
-std::vector<std::string> Split(std::string sentence, const char* parse_char, int n = 100);
+std::vector<std::string> Split(std::string* sentence, const char* parse_char, int n = 100);
