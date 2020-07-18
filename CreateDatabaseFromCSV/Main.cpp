@@ -8,9 +8,10 @@
 #include <iostream>
 
 #include "utils.h"
+#include "test.h"
 
 // インライン引数は、最初の要素が作成するデータベースのファイル名、それ以降がCSVファイルのパス
-int main(int argc, char* argv[]) {
+int mainmain(int argc, char* argv[]) {
 	sqlite3* db;
 	char* zErrMsg;
 
@@ -90,4 +91,9 @@ int main(int argc, char* argv[]) {
 	sqlite3_close(db);
 
 	std::cout << "done.." << std::endl;
+}
+
+
+int main() {
+	split_test();
 }
