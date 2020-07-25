@@ -46,7 +46,12 @@ void DB::createTable(std::string file_name) {
 
 
 	//データベース上にテーブルを作成する
-	///todo///
+	this->makeTable(
+		table_name,
+		column_name,
+		column_type,
+		column_addinfo
+	);
 
 	// 各データの挿入作業を行う
 	std::vector<std::string> data;
@@ -55,6 +60,39 @@ void DB::createTable(std::string file_name) {
 
 		data.clear();
 	}
+}
+
+
+bool DB::makeTable(std::string table_name, std::vector<std::string> name, std::vector<std::string> type, std::vector<std::string> additional) {
+	int num_data = name.size();
+
+	// 全ての配列の長さが等しくないなら処理を終了する
+	if (!(num_data == type.size() && num_data == additional.size())) {
+		std::cout << "テーブル作成用のデータの数が合いません" << std::endl;
+		return false;
+	}
+
+	std::string data_str = "";
+
+	for (int i = 0; i < num_data; i++) {
+		if (i != 0){
+			data_str += ",";
+		}
+		data_str += name[i] + " " + type[i] + " " + additional[i];
+	}
+
+	std::string create_command = "create table " + table_name + " (" + data_str + ")";
+
+	//テーブルを作成する処理を実行する
+	char* errorMessage;
+	auto status = sqlite3_exec(this->db, create_command.c_str(), nullptr, nullptr, &errorMessage);
+	if (status != SQLITE_OK) {
+		std::cout << "テーブルの作成に失敗しました : " << errorMessage << std::endl;
+		sqlite3_free(errorMessage);
+		return false;
+	}
+
+	return true;
 }
 
 
