@@ -18,7 +18,7 @@ DB::~DB() {
 	sqlite3_close(this->db);
 }
 
-void DB::createTable(std::string file_name) {
+void DB::createTable(std::string file_name, bool is_sample) {
 	// ファイルを1行ずつリストに入れる
 	std::vector<std::string> lines = read_file(file_name);
 
@@ -39,31 +39,75 @@ void DB::createTable(std::string file_name) {
 				  以降：各データ
 	*/
 
-	std::string table_name = lines[0];												// テーブルの名前
+	std::string table_name = Split(&lines[0], ",")[0];							// テーブルの名前
 	std::vector<std::string> column_name = Split(&lines[1], ",");		// カラムの名称
 	std::vector<std::string> column_type = Split(&lines[2], ",");			// カラムの型
 	std::vector<std::string> column_addinfo = Split(&lines[3], ",");	// カラムの制約条件等の追加情報
 
 
 	//データベース上にテーブルを作成する
-	this->makeTable(
+	bool is_ok = this->makeEmptyTable(
 		table_name,
 		column_name,
 		column_type,
 		column_addinfo
 	);
+	if (!is_ok) {
+		return;
+	}
 
 	// 各データの挿入作業を行う
-	std::vector<std::string> data;
-	for (int i = 4; i < num_lines; i++) {
-		data = Split(&lines[i], ",");
+	std::vector<std::string> datas;
 
-		data.clear();
+	for (int i = 4; i < num_lines; i++) {
+		datas = Split(&lines[i], ",");
+
+		this->insertData(table_name, datas, column_name.size());
+
+		datas.clear();
 	}
+
+	// サンプル表示
+	this->showSample(table_name);
+}
+
+void DB::showSample(std::string table_name) {
+	char* errorMessage;
+	std::string command = "SELECT * FROM " + table_name + ";";
+	sqlite3_exec(this->db, command.c_str(), nullptr, nullptr, &errorMessage);
+}
+
+bool DB::insertData(std::string table_name, std::vector<std::string> datas, int num_data) {
+	int data_count = datas.size();
+	if (data_count < num_data) {
+		std::cout << "データの個数が少ないです" << std::endl;
+		return false;
+	}
+
+	std::string command = "INSERT INTO " + table_name + " VALUES (";
+	std::string comma = "";
+	for (int i = 0; i < data_count; i++) {
+		command += comma + datas[i];
+		if (comma.empty()) {
+			comma = ", ";
+		}
+	}
+	command += ");";
+
+	//コマンドを実行する
+	char* errorMessage;
+	auto status = sqlite3_exec(this->db, command.c_str(), nullptr, nullptr, &errorMessage);
+	if (status != SQLITE_OK) {
+		std::cout << "データの挿入に失敗しました : " << errorMessage << std::endl;
+		sqlite3_free(errorMessage);
+		return false;
+	}
+
+	return true;
 }
 
 
-bool DB::makeTable(std::string table_name, std::vector<std::string> name, std::vector<std::string> type, std::vector<std::string> additional) {
+bool DB::makeEmptyTable(std::string table_name, std::vector<std::string> name, std::vector<std::string> type, std::vector<std::string> additional) {
 	int num_data = name.size();
 
 	// 全ての配列の長さが等しくないなら処理を終了する
@@ -81,7 +125,7 @@ bool DB::makeTable(std::string table_name, std::vector<std::string> name, std::v
 		data_str += name[i] + " " + type[i] + " " + additional[i];
 	}
 
-	std::string create_command = "create table " + table_name + " (" + data_str + ")";
+	std::string create_command = "create table if not exists " + table_name + " (" + data_str + ")";
 
 	//テーブルを作成する処理を実行する
 	char* errorMessage;
@@ -122,6 +166,8 @@ sqlite3* make_db_file(std::string file_name) {
 		std::string save_ok;
 		bool is_input_loop = true;
 
+		ifs.close();
+
 		// Y, Nが入力されるまで、入力処理をループし続ける
 		while (is_input_loop) {
 			is_input_loop = false;
@@ -131,7 +177,8 @@ sqlite3* make_db_file(std::string file_name) {
 			std::cin >> save_ok;
 			if (CompareString(save_ok, "y")) {
 				//既存のファイルを削除する
-				if (remove(db_path.c_str())) {
+				int check = remove(db_path.c_str());
+				if (check == 0) {
 					std::cout << "既存のファイルを削除しました。" << std::endl;
 					is_up_save = true;
 				}

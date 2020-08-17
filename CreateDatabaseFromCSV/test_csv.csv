@@ -1,7 +1,20 @@
-c,2,a
-d
-c
-er
-asdf,cxzv
-zzz,qqq
-csadf,009
+sample,,
+a,b,c
+integer,char(10),integer
+primary key,not null,
+0,'a',2
+1,'b',3
+2,'c',74
+3,'d',1
+4,'w',8
+5,'a',99
+6,'c',44
+7,'h',61
+8,'g',7
+9,'r',2
+10,'c',641
+11,'a',323
+12,'q',4
+13,'v',8
+14,'m',5
+15,'t',2

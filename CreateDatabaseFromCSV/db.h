@@ -9,12 +9,17 @@
 class DB {
 private:
 	sqlite3* db;
+
+	bool makeEmptyTable(std::string table_name, std::vector<std::string> name, std::vector<std::string> type, std::vector<std::string> additional);
+	bool insertData(std::string table_name, std::vector<std::string> datas, int num_data);
 public:
 	DB(std::string file_name);
 	~DB();
 
-	void createTable(std::string file_name);
-	bool makeTable(std::string table_name, std::vector<std::string> name, std::vector<std::string> type, std::vector<std::string> additional);
+	void createTable(std::string file_name, bool is_sample=false);
+	void showSample(std::string table_name);
+
+	bool checkCorrect() { return db != 0; }
 };
 
 //ファイル名を受け取って、データベース用のファイルを作成、または指定する
