@@ -15,7 +15,7 @@ DB::DB(std::string file_name)
 }
 
 DB::~DB() {
-	sqlite3_close(this->db);
+	sqlite3_close_v2(this->db);
 }
 
 void DB::createTable(std::string file_name, bool is_sample) {
@@ -74,7 +74,10 @@ void DB::createTable(std::string file_name, bool is_sample) {
 void DB::showSample(std::string table_name) {
 	char* errorMessage;
 	std::string command = "SELECT * FROM " + table_name + ";";
-	sqlite3_exec(this->db, command.c_str(), nullptr, nullptr, &errorMessage);
+
+	int counter = 0;
+	sqlite3_exec(this->db, command.c_str(), show, &counter, &errorMessage);
+	sqlite3_free(errorMessage);
 }
 
 bool DB::insertData(std::string table_name, std::vector<std::string> datas, int num_data) {
@@ -147,7 +150,9 @@ sqlite3* make_db_file(std::string file_name) {
 	std::string output_dir_name = "Output_DB";
 	struct stat statBuf;
 	if (!stat(output_dir_name.c_str(), &statBuf) == 0) {
-		_mkdir(output_dir_name.c_str());
+		if (_mkdir(output_dir_name.c_str()) == -1) {
+			std::cout << "出力ディレクトリの作成に失敗しました" << std::endl;
+		}
 	}
 
 	//dbファイルを新規に作成する

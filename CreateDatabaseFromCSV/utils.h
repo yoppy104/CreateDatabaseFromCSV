@@ -22,3 +22,14 @@ std::vector<std::string> Split(std::string* sentence, const char* parse_char, in
 /// ファイル内の文章をvector<string>の形式で返す
 ///</summary>
 std::vector<std::string> read_file(std::string file_name);
+
+
+/// <summary>
+/// DB表示コールバック処理
+/// </summary>
+/// <param name="user_data"></param>
+/// <param name="argc"></param>
+/// <param name="argv"></param>
+/// <param name="field"></param>
+/// <returns></returns>
+int show(void*, int, char**, char**);

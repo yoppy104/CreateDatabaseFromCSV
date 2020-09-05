@@ -69,3 +69,15 @@ std::vector<std::string> read_file(std::string file_name) {
 
     return out;
 }
+
+int show(void* user_data, int argc, char** argv, char** field) {
+    int i;
+    int* counter = (int*)user_data;
+
+    for (i = 0; i < argc; i++) {
+        std::cout << field[i] << ", " << argv[i] << std::endl;
+    }
+
+    (*counter)++;
+    return 0;
+}
